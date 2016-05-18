@@ -6,12 +6,15 @@ FROM php:5.6-apache
 RUN a2enmod rewrite
 
 # install the PHP extensions we need
-RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev libpq-dev wget mysql-client libxml2-dev \
+RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev libpq-dev wget mysql-client libxml2-dev libmcrypt-dev\
 	&& rm -rf /var/lib/apt/lists/* \
 	&& docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
         && pecl install xhprof-beta xdebug \
         && docker-php-ext-enable xhprof xdebug \
-	&& docker-php-ext-install gd mbstring opcache pdo pdo_mysql pdo_pgsql zip soap
+	&& docker-php-ext-install gd mbstring opcache pdo pdo_mysql pdo_pgsql zip soap mcrypt
+
+# install support software
+RUN apt-get update && apt-get install nano
 
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
